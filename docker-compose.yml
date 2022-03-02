@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+  db:
+    build: .docker/postgres
+    restart: always
+    tty: true
+    ports:
+      - 6003:5432
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=django-poc_db
+    volumes:
+      - .docker/dbdata:/var/lib/postgresql/data
